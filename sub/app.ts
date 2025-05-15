@@ -1,22 +1,124 @@
 import { APIGatewayProxyEvent, APIGatewayProxyResult } from 'aws-lambda';
+import { ZodError } from 'zod';
+import { HTTPError } from './src/helper/error-helper';
+import { authenticate } from './src/middleware/auth';
+import { publishRouter } from './src/router/publisher';
+import { dbHealthCheck } from './src/service/db-service';
+import { ProjectService } from './src/service/project-service';
 
-export const lambdaHandler = async (
+const entryLogger = (event: APIGatewayProxyEvent) => {
+  const requestId = event.requestContext.requestId;
+  const httpMethod = event.httpMethod;
+  const path = event.path;
+  const queryStringParameters = event.queryStringParameters;
+  const body = event.body;
+  console.log(
+    `incoming request, httpMethod: ${httpMethod}; path: ${path}; requestId: ${requestId}; queryStringParameters: ${JSON.stringify(
+      queryStringParameters
+    )}; body: ${body}`
+  );
+};
+
+const allowOnlyMethods = (
+  event: APIGatewayProxyEvent,
+  allowedMethods: 'POST' | 'GET' | 'PUT' | 'DELETE'
+) => {
+  const httpMethod = event.httpMethod;
+  if (httpMethod !== allowedMethods) {
+    console.error(
+      `Method not allowed, httpMethod: ${httpMethod}; allowedMethods: ${allowedMethods}`
+    );
+    throw new HTTPError(405, 'Method not allowed');
+  }
+};
+
+const errorHandler = (err: unknown) => {
+  console.error('Error occurred:', err);
+  if (err instanceof HTTPError) {
+    const statusCode = err.status || 500;
+    const message = err.message || 'Internal server error';
+    return {
+      statusCode,
+      body: JSON.stringify({
+        message: message,
+      }),
+    };
+  }
+  if (err instanceof ZodError) {
+    const statusCode = 400;
+    const message = err.errors.map((e) => e.message).join(', ');
+    return {
+      statusCode,
+      body: JSON.stringify({
+        message: message,
+      }),
+    };
+  }
+  return {
+    statusCode: 500,
+    body: JSON.stringify({
+      message: 'Internal server error',
+    }),
+  };
+};
+
+export const subscriber = async (
   event: APIGatewayProxyEvent
 ): Promise<APIGatewayProxyResult> => {
   try {
+    entryLogger(event);
+    allowOnlyMethods(event, 'POST');
+    const contextAwareEvent = await authenticate(event);
     return {
       statusCode: 200,
       body: JSON.stringify({
-        message: 'hello world',
+        message: 'hello world1',
       }),
     };
   } catch (err) {
-    console.log(err);
+    return errorHandler(err);
+  }
+};
+
+export const publisher = async (
+  event: APIGatewayProxyEvent
+): Promise<APIGatewayProxyResult> => {
+  try {
+    entryLogger(event);
+    allowOnlyMethods(event, 'POST');
+    await dbHealthCheck();
+    const contextAwareEvent = await authenticate(event);
+    console.log(
+      `authenticated event: ${contextAwareEvent.requestContext.project.projectId}; `
+    );
+    return await publishRouter(contextAwareEvent);
+  } catch (err) {
+    return errorHandler(err);
+  }
+};
+
+export const createProject = async (
+  event: APIGatewayProxyEvent
+): Promise<APIGatewayProxyResult> => {
+  try {
+    entryLogger(event);
+    const contextAwareEvent = await authenticate(event);
+    allowOnlyMethods(event, 'POST');
+    if (!contextAwareEvent.requestContext.project.isSuperAdmin) {
+      throw new HTTPError(404, 'Method not allowed');
+    }
+    const { clientName } = JSON.parse(event.body || '{}');
+    const project = await ProjectService.createProject(clientName);
     return {
-      statusCode: 500,
+      statusCode: 200,
       body: JSON.stringify({
-        message: 'some error happened',
+        message: 'Project created successfully',
+        projectId: project.projectId,
+        clientName: project.clientName,
+        clientSecret: project.clientSecret,
       }),
     };
+  } catch (err) {
+    return errorHandler(err);
   }
 };

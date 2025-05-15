@@ -1,0 +1,59 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+generator client {
+  provider      = "prisma-client-js"
+  output        = "../generated/prisma"
+  binaryTargets = ["native", "rhel-openssl-3.0.x"]
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model Project {
+  projectId     String          @id @default(uuid())
+  isSuperAdmin  Boolean         @default(false)
+  isDeleted     Boolean         @default(false)
+  createdAt     DateTime        @default(now())
+  updatedAt     DateTime        @updatedAt
+  ProjectSecret ProjectSecret[]
+  Task          Task[]
+}
+
+model ProjectSecret {
+  projectSecretId String  @id @default(uuid())
+  projectId       String
+  project         Project @relation(fields: [projectId], references: [projectId])
+  clientName      String
+  clientSecret    String  @unique
+  isDeleted       Boolean @default(false)
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@unique([projectId, clientName, clientSecret])
+}
+
+enum Status {
+  PENDING
+  IN_PROGRESS
+  COMPLETED
+  FAILED
+}
+
+model Task {
+  taskId    String   @id @default(uuid())
+  projectId String
+  project   Project  @relation(fields: [projectId], references: [projectId])
+  timeStamp DateTime @default(now())
+  taskDump  Json
+  status    Status   @default(PENDING)
+  isDeleted Boolean  @default(false)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
