@@ -48,9 +48,6 @@ export class ProjectService {
     }
     const { projectId, clientName, clientSecret } = decoded;
     const dbClient = await dbClientPromise;
-    console.log(
-      `querying projectSecret with ${projectId}, ${clientName}, ${clientSecret}`
-    );
 
     const projectSecret = await dbClient.projectSecret.findUnique({
       where: {
@@ -64,7 +61,7 @@ export class ProjectService {
         project: true,
       },
     });
-    console.log('projectSecret', projectSecret?.projectId);
+    console.log('authentication successful for ', projectSecret?.projectId);
     if (!projectSecret) {
       throw new HTTPError(401, 'Unauthorized');
     }

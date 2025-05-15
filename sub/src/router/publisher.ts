@@ -4,17 +4,21 @@ import { CustomAPIGatewayProxyEvent } from '../type';
 
 export const publishRouter = async (event: CustomAPIGatewayProxyEvent) => {
   const { body } = event;
-  const parsedBody = publisherSchema.parse(body);
+  const parsedBody = publisherSchema.parse(JSON.parse(body || '{}'));
   const task = await TaskService.createTask(parsedBody);
 
   try {
+    const isoWithoutMills = new Date(parsedBody.timestamp)
+      .toISOString()
+      .split('.')[0];
     const result = await putEvent({
       Name: `${task.projectId}-${task.taskId}`,
-      ScheduleExpression: `at(${parsedBody.timestamp})`,
+      ScheduleExpression: `at(${isoWithoutMills})`,
       FlexibleTimeWindow: { Mode: 'OFF' },
       Target: {
         Arn: 'arn:aws:lambda:ap-south-1:435464651133:function:taskScheduler-subFunction-GFmu3KNy7VIW',
-        RoleArn: 'arn:aws:iam::435464651133:role/scheduler-rolese',
+        RoleArn:
+          'arn:aws:iam::435464651133:role/taskScheduler-subFunctionRole-GvGKIFlFPJ4B',
         RetryPolicy: {
           MaximumRetryAttempts: 3,
           MaximumEventAgeInSeconds: 60,
@@ -33,6 +37,7 @@ export const publishRouter = async (event: CustomAPIGatewayProxyEvent) => {
       }),
     };
   } catch (error) {
+    console.error('Error scheduling task:', error);
     return {
       statusCode: 500,
       body: JSON.stringify({

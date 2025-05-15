@@ -1,13 +1,14 @@
 import { APIGatewayProxyEvent, APIGatewayProxyResult } from 'aws-lambda';
 import { ZodError } from 'zod';
+import './_prisma-assets';
 import { HTTPError } from './src/helper/error-helper';
 import { authenticate } from './src/middleware/auth';
 import { publishRouter } from './src/router/publisher';
-import { dbHealthCheck } from './src/service/db-service';
+import { subscribeRoute } from './src/router/subscriber';
 import { ProjectService } from './src/service/project-service';
 
 const entryLogger = (event: APIGatewayProxyEvent) => {
-  const requestId = event.requestContext.requestId;
+  const requestId = event.requestContext?.requestId;
   const httpMethod = event.httpMethod;
   const path = event.path;
   const queryStringParameters = event.queryStringParameters;
@@ -67,14 +68,7 @@ export const subscriber = async (
 ): Promise<APIGatewayProxyResult> => {
   try {
     entryLogger(event);
-    allowOnlyMethods(event, 'POST');
-    const contextAwareEvent = await authenticate(event);
-    return {
-      statusCode: 200,
-      body: JSON.stringify({
-        message: 'hello world1',
-      }),
-    };
+    return await subscribeRoute(event);
   } catch (err) {
     return errorHandler(err);
   }
@@ -85,12 +79,11 @@ export const publisher = async (
 ): Promise<APIGatewayProxyResult> => {
   try {
     entryLogger(event);
+    const start = Date.now();
     allowOnlyMethods(event, 'POST');
-    await dbHealthCheck();
+    console.log('Step 1 start');
     const contextAwareEvent = await authenticate(event);
-    console.log(
-      `authenticated event: ${contextAwareEvent.requestContext.project.projectId}; `
-    );
+    console.log('Step 1 done', Date.now() - start, 'ms');
     return await publishRouter(contextAwareEvent);
   } catch (err) {
     return errorHandler(err);

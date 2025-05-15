@@ -9,7 +9,6 @@ export const dbClientPromise = (async () => {
   }
   await env.DATABASE_URL;
   const client = new PrismaClient();
-  console.log('Connecting to database...');
   return client;
 })();
 
