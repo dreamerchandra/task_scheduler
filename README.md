@@ -99,5 +99,5 @@ Content-Type: application/json
 For technical support or questions about the API:
 
 - Email: chandru.ck58@gmail.com
-- Documentation: https://docs.taskscheduler.com
+- Documentation: https://dreamerchandra.github.io/task_scheduler/
 - Status Page: https://status.taskscheduler.com
