@@ -12,7 +12,7 @@ export const publishRouter = async (event: CustomAPIGatewayProxyEvent) => {
       .toISOString()
       .split('.')[0];
     const result = await putEvent({
-      Name: `${task.projectId}-${task.taskId}`,
+      Name: task.taskId,
       ScheduleExpression: `at(${isoWithoutMills})`,
       FlexibleTimeWindow: { Mode: 'OFF' },
       Target: {

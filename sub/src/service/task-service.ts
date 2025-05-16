@@ -50,11 +50,13 @@ export class TaskService {
   ): Promise<PublisherSchema & { taskId: string }> {
     const { projectId, body, timestamp } = data;
     const dbClient = await dbClientPromise;
+    const random10Digits = Math.random().toString(10).substring(2, 9);
     const task = await dbClient.task.create({
       data: {
         projectId,
         taskDump: body,
         timeStamp: new Date(timestamp),
+        tag: random10Digits,
       },
     });
     return {
