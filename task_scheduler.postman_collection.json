@@ -1,0 +1,146 @@
+{
+  "info": {
+    "name": "Task Scheduler API",
+    "description": "A powerful task scheduling service that allows you to schedule and manage tasks with ease.",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "item": [
+    {
+      "name": "Schedule Task",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Authorization",
+            "value": "Bearer {{PROJECT_SECRET}}",
+            "type": "text"
+          },
+          {
+            "key": "Content-Type",
+            "value": "application/json",
+            "type": "text"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"timestamp\": \"2024-03-20T12:00:00Z\",\n  \"projectId\": \"{{PROJECT_ID}}\",\n  \"body\": {\n    \"taskTag\": \"optional-task-identifier\",\n    \"callbackUrl\": \"https://your-endpoint.com/webhook\",\n    \"method\": \"POST\",\n    \"headers\": {\n      \"Authorization\": \"Bearer your-callback-auth-token\",\n      \"Content-Type\": \"application/json\"\n    },\n    \"body\": \"{\\\"key\\\": \\\"value\\\"}\"\n  }\n}"
+        },
+        "url": {
+          "raw": "https://9vk36vxk5k.execute-api.ap-south-1.amazonaws.com/Prod/publish",
+          "protocol": "https",
+          "host": [
+            "9vk36vxk5k",
+            "execute-api",
+            "ap-south-1",
+            "amazonaws",
+            "com"
+          ],
+          "path": ["Prod", "publish"]
+        },
+        "description": "Schedule a new task with the specified callback URL and payload"
+      },
+      "response": [
+        {
+          "name": "Success Response",
+          "originalRequest": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"timestamp\": \"2024-03-20T12:00:00Z\",\n  \"projectId\": \"{{PROJECT_ID}}\",\n  \"body\": {\n    \"taskTag\": \"optional-task-identifier\",\n    \"callbackUrl\": \"https://your-endpoint.com/webhook\",\n    \"method\": \"POST\",\n    \"headers\": {\n      \"Authorization\": \"Bearer your-callback-auth-token\",\n      \"Content-Type\": \"application/json\"\n    },\n    \"body\": \"{\\\"key\\\": \\\"value\\\"}\"\n  }\n}"
+            },
+            "url": {
+              "raw": "https://9vk36vxk5k.execute-api.ap-south-1.amazonaws.com/Prod/publish"
+            }
+          },
+          "status": "OK",
+          "code": 200,
+          "header": [
+            {
+              "key": "Content-Type",
+              "value": "application/json"
+            }
+          ],
+          "body": "{\n  \"message\": \"Task scheduled via EventBridge\",\n  \"taskId\": \"TASK_ID\"\n}"
+        }
+      ]
+    },
+    {
+      "name": "Delete Task",
+      "request": {
+        "method": "DELETE",
+        "header": [
+          {
+            "key": "Authorization",
+            "value": "Bearer {{PROJECT_SECRET}}",
+            "type": "text"
+          },
+          {
+            "key": "Content-Type",
+            "value": "application/json",
+            "type": "text"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"taskId\": \"{{TASK_ID}}\",\n  \"projectId\": \"{{PROJECT_ID}}\"\n}"
+        },
+        "url": {
+          "raw": "https://9vk36vxk5k.execute-api.ap-south-1.amazonaws.com/Prod/delete",
+          "protocol": "https",
+          "host": [
+            "9vk36vxk5k",
+            "execute-api",
+            "ap-south-1",
+            "amazonaws",
+            "com"
+          ],
+          "path": ["Prod", "delete"]
+        },
+        "description": "Delete a previously scheduled task"
+      },
+      "response": [
+        {
+          "name": "Success Response",
+          "originalRequest": {
+            "method": "DELETE",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"taskId\": \"{{TASK_ID}}\",\n  \"projectId\": \"{{PROJECT_ID}}\"\n}"
+            },
+            "url": {
+              "raw": "https://9vk36vxk5k.execute-api.ap-south-1.amazonaws.com/Prod/delete"
+            }
+          },
+          "status": "OK",
+          "code": 200,
+          "header": [
+            {
+              "key": "Content-Type",
+              "value": "application/json"
+            }
+          ],
+          "body": "{\n  \"message\": \"Task deleted successfully\",\n  \"taskId\": \"{{TASK_ID}}\"\n}"
+        }
+      ]
+    }
+  ],
+  "variable": [
+    {
+      "key": "PROJECT_SECRET",
+      "value": "your-project-secret",
+      "type": "string"
+    },
+    {
+      "key": "PROJECT_ID",
+      "value": "your-project-id",
+      "type": "string"
+    },
+    {
+      "key": "TASK_ID",
+      "value": "your-task-id",
+      "type": "string"
+    }
+  ]
+}

@@ -48,7 +48,7 @@ const errorHandler = (err: unknown) => {
   }
   if (err instanceof ZodError) {
     const statusCode = 400;
-    const message = err.errors.map((e) => e.message).join(', ');
+    const message = err.format();
     return {
       statusCode,
       body: JSON.stringify({
