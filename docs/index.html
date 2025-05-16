@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Task Scheduler API Documentation</title>
+    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.24.1/themes/prism-tomorrow.min.css">
+</head>
+
+<body>
+    <nav class="sidebar">
+        <div class="logo">
+            <h1>Task Scheduler</h1>
+        </div>
+        <ul class="nav-links">
+            <li><a href="#getting-started">Getting Started</a></li>
+            <li><a href="#authentication">Authentication</a></li>
+            <li><a href="#base-url">Base URL</a></li>
+            <li><a href="#api-endpoints">API Endpoints</a>
+                <ul>
+                    <li><a href="#schedule-task">Schedule a Task</a></li>
+                    <li><a href="#delete-task">Delete a Task</a></li>
+                </ul>
+            </li>
+            <li><a href="#error-codes">Error Codes</a></li>
+            <li><a href="#support">Support</a></li>
+        </ul>
+    </nav>
+
+    <main class="content">
+        <section id="getting-started">
+            <h1>Task Scheduler API Documentation</h1>
+            <p>A powerful task scheduling service that allows you to schedule and manage tasks with ease. This service
+                is built on AWS EventBridge and provides a secure, scalable way to schedule tasks.</p>
+        </section>
+
+        <section id="authentication">
+            <h2>Authentication</h2>
+            <p>To use the Task Scheduler API, you'll need to obtain your project credentials (Project ID and Client
+                Secret) from me. These credentials are required for authentication.</p>
+        </section>
+
+        <section id="base-url">
+            <h2>Base URL</h2>
+            <pre><code class="language-plaintext">https://9vk36vxk5k.execute-api.ap-south-1.amazonaws.com/Prod</code></pre>
+        </section>
+
+        <section id="api-endpoints">
+            <h2>API Endpoints</h2>
+
+            <div id="schedule-task">
+                <h3>1. Schedule a Task</h3>
+                <p><strong>Endpoint:</strong> <code>POST /publish</code></p>
+
+                <h4>Headers:</h4>
+                <pre><code class="language-plaintext">Authorization: Bearer <PROJECT_SECRET>
+Content-Type: application/json</code></pre>
+
+                <h4>Request Body:</h4>
+                <pre><code class="language-json">{
+  "timestamp": "2024-03-20T12:00:00Z",
+  "projectId": "PROJECT_ID",
+  "body": {
+    "taskTag": "optional-task-identifier",
+    "callbackUrl": "https://your-endpoint.com/webhook",
+    "method": "POST",
+    "headers": {
+      "Authorization": "Bearer your-callback-auth-token",
+      "Content-Type": "application/json"
+    },
+    "body": "{\"key\": \"value\"}"
+  }
+}</code></pre>
+
+                <h4>Response:</h4>
+                <pre><code class="language-json">{
+  "message": "Task scheduled via EventBridge",
+  "taskId": "TASK_ID"
+}</code></pre>
+            </div>
+
+            <div id="delete-task">
+                <h3>2. Delete a Scheduled Task</h3>
+                <p><strong>Endpoint:</strong> <code>DELETE /delete</code></p>
+
+                <h4>Headers:</h4>
+                <pre><code class="language-plaintext">Authorization: Bearer <PROJECT_SECRET>
+Content-Type: application/json</code></pre>
+
+                <h4>Request Body:</h4>
+                <pre><code class="language-json">{
+  "taskId": "TASK_ID",
+  "projectId": "PROJECT_ID"
+}</code></pre>
+
+                <h4>Response:</h4>
+                <pre><code class="language-json">{
+  "message": "Task deleted successfully",
+  "taskId": "TASK_ID"
+}</code></pre>
+            </div>
+        </section>
+
+        <section id="error-codes">
+            <h2>Error Codes</h2>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Status Code</th>
+                        <th>Description</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>401</td>
+                        <td>Unauthorized - Invalid or missing authentication</td>
+                    </tr>
+                </tbody>
+            </table>
+        </section>
+
+        <section id="support">
+            <h2>Support</h2>
+            <p>For technical support or questions about the API:</p>
+            <ul>
+                <li>Email: <a href="mailto:chandru.ck58@gmail.com">chandru.ck58@gmail.com</a></li>
+                <li>Documentation: <a href="https://docs.taskscheduler.com">https://docs.taskscheduler.com</a></li>
+                <li>Status Page: <a href="https://status.taskscheduler.com">https://status.taskscheduler.com</a></li>
+            </ul>
+        </section>
+    </main>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.24.1/prism.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.24.1/components/prism-json.min.js"></script>
+    <script src="script.js"></script>
+</body>
+
+</html>
