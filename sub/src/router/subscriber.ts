@@ -1,10 +1,13 @@
 import { APIGatewayProxyEvent } from 'aws-lambda';
-import { subscriberSchema, TaskService } from '../service/task-service';
+import { TaskService } from '../service/task-service';
 
-export const subscribeRoute = async (event: APIGatewayProxyEvent) => {
-  const { body } = event;
-  const parsedBody = subscriberSchema.parse(JSON.parse(body || '{}'));
-  await TaskService.triggerTask(parsedBody.taskId);
+export const subscribeRoute = async (
+  event: APIGatewayProxyEvent & {
+    taskId: string;
+  }
+) => {
+  const taskId = event.taskId || JSON.parse(event.body || '{}').taskId;
+  await TaskService.triggerTask(taskId);
 
   return {
     statusCode: 200,

@@ -68,7 +68,7 @@ export const subscriber = async (
 ): Promise<APIGatewayProxyResult> => {
   try {
     entryLogger(event);
-    return await subscribeRoute(event);
+    return await subscribeRoute(event as any);
   } catch (err) {
     return errorHandler(err);
   }

@@ -22,10 +22,6 @@ export const publisherSchema = z.object({
 });
 type PublisherSchema = z.infer<typeof publisherSchema>;
 
-export const subscriberSchema = z.object({
-  taskId: z.string().max(100),
-});
-
 const retrier = (
   fn: () => Promise<any>,
   retries: number,
@@ -111,7 +107,7 @@ export class TaskService {
           ...headers,
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify(body),
+        body: body,
       });
       if (!response.ok) {
         throw new Error(`HTTP error! status: ${response.status}`);
