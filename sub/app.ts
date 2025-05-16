@@ -3,6 +3,7 @@ import { ZodError } from 'zod';
 import './_prisma-assets';
 import { HTTPError } from './src/helper/error-helper';
 import { authenticate } from './src/middleware/auth';
+import { deleteRoute } from './src/router/delete';
 import { publishRouter } from './src/router/publisher';
 import { subscribeRoute } from './src/router/subscriber';
 import { ProjectService } from './src/service/project-service';
@@ -79,12 +80,22 @@ export const publisher = async (
 ): Promise<APIGatewayProxyResult> => {
   try {
     entryLogger(event);
-    const start = Date.now();
     allowOnlyMethods(event, 'POST');
-    console.log('Step 1 start');
     const contextAwareEvent = await authenticate(event);
-    console.log('Step 1 done', Date.now() - start, 'ms');
     return await publishRouter(contextAwareEvent);
+  } catch (err) {
+    return errorHandler(err);
+  }
+};
+
+export const deleteHandler = async (
+  event: APIGatewayProxyEvent
+): Promise<APIGatewayProxyResult> => {
+  try {
+    entryLogger(event);
+    allowOnlyMethods(event, 'DELETE');
+    const contextAwareEvent = await authenticate(event);
+    return await deleteRoute(contextAwareEvent);
   } catch (err) {
     return errorHandler(err);
   }

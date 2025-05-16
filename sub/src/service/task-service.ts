@@ -20,6 +20,11 @@ export const publisherSchema = z.object({
     body: z.string().max(10240), // 10kb max
   }),
 });
+
+export const deleteSchema = z.object({
+  projectId: z.string().max(100),
+  taskId: z.string().max(100),
+});
 type PublisherSchema = z.infer<typeof publisherSchema>;
 
 const retrier = (
@@ -73,12 +78,16 @@ export class TaskService {
     return this._toTask(task);
   }
 
-  static _toTask(task: any): PublisherSchema & { taskId: string } {
+  static _toTask(
+    task: any
+  ): PublisherSchema & { taskId: string; status: Status; isDeleted: boolean } {
     return {
       taskId: task.taskId,
       projectId: task.projectId,
       body: task.taskDump,
       timestamp: task.timeStamp.toISOString(),
+      status: task.status,
+      isDeleted: task.isDeleted,
     };
   }
 
@@ -133,5 +142,19 @@ export class TaskService {
       return;
     }
     await this.makeTaskStatus(taskId, Status.COMPLETED);
+  }
+
+  static async deleteTask(taskId: string) {
+    const dbClient = await dbClientPromise;
+    await dbClient.task.update({
+      where: {
+        taskId,
+        status: Status.PENDING, // only allow delete if task is pending
+      },
+      data: {
+        isDeleted: true,
+      },
+    });
+    return;
   }
 }
