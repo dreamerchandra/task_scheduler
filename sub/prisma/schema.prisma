@@ -56,5 +56,5 @@ model Task {
   isDeleted Boolean  @default(false)
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
-  tag       String
+  tag       String   @default("")
 }

@@ -3309,6 +3309,7 @@ export namespace Prisma {
     isDeleted: boolean | null
     createdAt: Date | null
     updatedAt: Date | null
+    tag: string | null
   }
 
   export type TaskMaxAggregateOutputType = {
@@ -3319,6 +3320,7 @@ export namespace Prisma {
     isDeleted: boolean | null
     createdAt: Date | null
     updatedAt: Date | null
+    tag: string | null
   }
 
   export type TaskCountAggregateOutputType = {
@@ -3330,6 +3332,7 @@ export namespace Prisma {
     isDeleted: number
     createdAt: number
     updatedAt: number
+    tag: number
     _all: number
   }
 
@@ -3342,6 +3345,7 @@ export namespace Prisma {
     isDeleted?: true
     createdAt?: true
     updatedAt?: true
+    tag?: true
   }
 
   export type TaskMaxAggregateInputType = {
@@ -3352,6 +3356,7 @@ export namespace Prisma {
     isDeleted?: true
     createdAt?: true
     updatedAt?: true
+    tag?: true
   }
 
   export type TaskCountAggregateInputType = {
@@ -3363,6 +3368,7 @@ export namespace Prisma {
     isDeleted?: true
     createdAt?: true
     updatedAt?: true
+    tag?: true
     _all?: true
   }
 
@@ -3447,6 +3453,7 @@ export namespace Prisma {
     isDeleted: boolean
     createdAt: Date
     updatedAt: Date
+    tag: string
     _count: TaskCountAggregateOutputType | null
     _min: TaskMinAggregateOutputType | null
     _max: TaskMaxAggregateOutputType | null
@@ -3475,6 +3482,7 @@ export namespace Prisma {
     isDeleted?: boolean
     createdAt?: boolean
     updatedAt?: boolean
+    tag?: boolean
     project?: boolean | ProjectDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["task"]>
 
@@ -3487,6 +3495,7 @@ export namespace Prisma {
     isDeleted?: boolean
     createdAt?: boolean
     updatedAt?: boolean
+    tag?: boolean
     project?: boolean | ProjectDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["task"]>
 
@@ -3499,6 +3508,7 @@ export namespace Prisma {
     isDeleted?: boolean
     createdAt?: boolean
     updatedAt?: boolean
+    tag?: boolean
     project?: boolean | ProjectDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["task"]>
 
@@ -3511,9 +3521,10 @@ export namespace Prisma {
     isDeleted?: boolean
     createdAt?: boolean
     updatedAt?: boolean
+    tag?: boolean
   }
 
-  export type TaskOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"taskId" | "projectId" | "timeStamp" | "taskDump" | "status" | "isDeleted" | "createdAt" | "updatedAt", ExtArgs["result"]["task"]>
+  export type TaskOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"taskId" | "projectId" | "timeStamp" | "taskDump" | "status" | "isDeleted" | "createdAt" | "updatedAt" | "tag", ExtArgs["result"]["task"]>
   export type TaskInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     project?: boolean | ProjectDefaultArgs<ExtArgs>
   }
@@ -3538,6 +3549,7 @@ export namespace Prisma {
       isDeleted: boolean
       createdAt: Date
       updatedAt: Date
+      tag: string
     }, ExtArgs["result"]["task"]>
     composites: {}
   }
@@ -3970,6 +3982,7 @@ export namespace Prisma {
     readonly isDeleted: FieldRef<"Task", 'Boolean'>
     readonly createdAt: FieldRef<"Task", 'DateTime'>
     readonly updatedAt: FieldRef<"Task", 'DateTime'>
+    readonly tag: FieldRef<"Task", 'String'>
   }
     
 
@@ -4430,7 +4443,8 @@ export namespace Prisma {
     status: 'status',
     isDeleted: 'isDeleted',
     createdAt: 'createdAt',
-    updatedAt: 'updatedAt'
+    updatedAt: 'updatedAt',
+    tag: 'tag'
   };
 
   export type TaskScalarFieldEnum = (typeof TaskScalarFieldEnum)[keyof typeof TaskScalarFieldEnum]
@@ -4689,6 +4703,7 @@ export namespace Prisma {
     isDeleted?: BoolFilter<"Task"> | boolean
     createdAt?: DateTimeFilter<"Task"> | Date | string
     updatedAt?: DateTimeFilter<"Task"> | Date | string
+    tag?: StringFilter<"Task"> | string
     project?: XOR<ProjectScalarRelationFilter, ProjectWhereInput>
   }
 
@@ -4701,6 +4716,7 @@ export namespace Prisma {
     isDeleted?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
+    tag?: SortOrder
     project?: ProjectOrderByWithRelationInput
   }
 
@@ -4716,6 +4732,7 @@ export namespace Prisma {
     isDeleted?: BoolFilter<"Task"> | boolean
     createdAt?: DateTimeFilter<"Task"> | Date | string
     updatedAt?: DateTimeFilter<"Task"> | Date | string
+    tag?: StringFilter<"Task"> | string
     project?: XOR<ProjectScalarRelationFilter, ProjectWhereInput>
   }, "taskId">
 
@@ -4728,6 +4745,7 @@ export namespace Prisma {
     isDeleted?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
+    tag?: SortOrder
     _count?: TaskCountOrderByAggregateInput
     _max?: TaskMaxOrderByAggregateInput
     _min?: TaskMinOrderByAggregateInput
@@ -4745,6 +4763,7 @@ export namespace Prisma {
     isDeleted?: BoolWithAggregatesFilter<"Task"> | boolean
     createdAt?: DateTimeWithAggregatesFilter<"Task"> | Date | string
     updatedAt?: DateTimeWithAggregatesFilter<"Task"> | Date | string
+    tag?: StringWithAggregatesFilter<"Task"> | string
   }
 
   export type ProjectCreateInput = {
@@ -4888,6 +4907,7 @@ export namespace Prisma {
     isDeleted?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
+    tag?: string
     project: ProjectCreateNestedOneWithoutTaskInput
   }
 
@@ -4900,6 +4920,7 @@ export namespace Prisma {
     isDeleted?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
+    tag?: string
   }
 
   export type TaskUpdateInput = {
@@ -4910,6 +4931,7 @@ export namespace Prisma {
     isDeleted?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    tag?: StringFieldUpdateOperationsInput | string
     project?: ProjectUpdateOneRequiredWithoutTaskNestedInput
   }
 
@@ -4922,6 +4944,7 @@ export namespace Prisma {
     isDeleted?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    tag?: StringFieldUpdateOperationsInput | string
   }
 
   export type TaskCreateManyInput = {
@@ -4933,6 +4956,7 @@ export namespace Prisma {
     isDeleted?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
+    tag?: string
   }
 
   export type TaskUpdateManyMutationInput = {
@@ -4943,6 +4967,7 @@ export namespace Prisma {
     isDeleted?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    tag?: StringFieldUpdateOperationsInput | string
   }
 
   export type TaskUncheckedUpdateManyInput = {
@@ -4954,6 +4979,7 @@ export namespace Prisma {
     isDeleted?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    tag?: StringFieldUpdateOperationsInput | string
   }
 
   export type StringFilter<$PrismaModel = never> = {
@@ -5151,6 +5177,7 @@ export namespace Prisma {
     isDeleted?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
+    tag?: SortOrder
   }
 
   export type TaskMaxOrderByAggregateInput = {
@@ -5161,6 +5188,7 @@ export namespace Prisma {
     isDeleted?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
+    tag?: SortOrder
   }
 
   export type TaskMinOrderByAggregateInput = {
@@ -5171,6 +5199,7 @@ export namespace Prisma {
     isDeleted?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
+    tag?: SortOrder
   }
   export type JsonWithAggregatesFilter<$PrismaModel = never> =
     | PatchUndefined<
@@ -5493,6 +5522,7 @@ export namespace Prisma {
     isDeleted?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
+    tag?: string
   }
 
   export type TaskUncheckedCreateWithoutProjectInput = {
@@ -5503,6 +5533,7 @@ export namespace Prisma {
     isDeleted?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
+    tag?: string
   }
 
   export type TaskCreateOrConnectWithoutProjectInput = {
@@ -5572,6 +5603,7 @@ export namespace Prisma {
     isDeleted?: BoolFilter<"Task"> | boolean
     createdAt?: DateTimeFilter<"Task"> | Date | string
     updatedAt?: DateTimeFilter<"Task"> | Date | string
+    tag?: StringFilter<"Task"> | string
   }
 
   export type ProjectCreateWithoutProjectSecretInput = {
@@ -5695,6 +5727,7 @@ export namespace Prisma {
     isDeleted?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
+    tag?: string
   }
 
   export type ProjectSecretUpdateWithoutProjectInput = {
@@ -5732,6 +5765,7 @@ export namespace Prisma {
     isDeleted?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    tag?: StringFieldUpdateOperationsInput | string
   }
 
   export type TaskUncheckedUpdateWithoutProjectInput = {
@@ -5742,6 +5776,7 @@ export namespace Prisma {
     isDeleted?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    tag?: StringFieldUpdateOperationsInput | string
   }
 
   export type TaskUncheckedUpdateManyWithoutProjectInput = {
@@ -5752,6 +5787,7 @@ export namespace Prisma {
     isDeleted?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    tag?: StringFieldUpdateOperationsInput | string
   }
 
 
