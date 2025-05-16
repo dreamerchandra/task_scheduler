@@ -8,7 +8,7 @@ export const deleteRoute = async (event: CustomAPIGatewayProxyEvent) => {
 
   try {
     const result = await deleteEvent({
-      Name: `${parsedBody.projectId}-${parsedBody.taskId}`,
+      Name: parsedBody.taskId,
       GroupName: 'default',
     });
     await TaskService.deleteTask(parsedBody.taskId);
@@ -21,7 +21,7 @@ export const deleteRoute = async (event: CustomAPIGatewayProxyEvent) => {
       }),
     };
   } catch (error) {
-    console.error('Error scheduling task:', error);
+    console.error('Error deleting task:', error);
     return {
       statusCode: 500,
       body: JSON.stringify({
